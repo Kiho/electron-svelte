@@ -1,6 +1,8 @@
 const { spawn } = require('child_process')
 const { resolve }  = require('path')
+const os = require('os');
 
+const windowsEnvironment = os.platform() === 'win32';
 /**
  * Note, this is probably not compatible with Windows machines
  */
@@ -12,10 +14,14 @@ const start = () => {
   startElectron()
 }
 
+let cmd = 'npm'
+if (windowsEnvironment) {
+  cmd = 'npm.cmd'
+}
 const startElectron = () => {
   electron = spawn(
-    'node',
-    [resolve(__dirname, 'node_modules', '.bin', 'electron'), '.'],
+    cmd,
+    ['run', 'electron'],
     {
       cwd: process.cwd(),
       env: process.env,
